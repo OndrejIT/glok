@@ -5,7 +5,7 @@
 
 ### Run
  - go get ./...
- - go run ./main.go (-h help, -d debug, -v verbose, -f Set flag redirect, -m Set map redirect, -c config path)
+ - go run ./main.go (-h help, -d debug, -p Set server port, -f Set flag redirect, -m Set map redirect, -c config path)
 
 ### Usage
   - http://127.0.0.1:8888/v1/lookup - Return host IP info

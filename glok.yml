@@ -1,0 +1,3 @@
+database: "GeoIP2-City-Test.mmdb"
+map: "http://maps.google.com?q=%f,%f"
+flag: "http://www.theodora.com/flags/%s-t.gif"

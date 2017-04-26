@@ -1,10 +1,15 @@
 # Maxmind GeoIP http server [![Build Status](https://travis-ci.org/OndrejIT/glok.svg?branch=master)](https://travis-ci.org/OndrejIT/glok)
 
+### Install
+  - Install [glide](https://github.com/Masterminds/glide) (Package Management for Golang)
+  - glide install
+  
+  - or: go get ./... (not recommended)
+
 ### Test
-  - go test ./...
+  - go test $(glide novendor)
 
 ### Run
- - go get ./...
  - go run ./main.go (-h help, -d debug, -p Set server port, -f Set flag redirect, -m Set map redirect, -c config path)
 
 ### Usage

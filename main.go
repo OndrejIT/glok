@@ -1,9 +1,9 @@
 package main
 
 import (
-	"glok/config"
-	"glok/geoip"
-	"glok/handler"
+	"github.com/ondrejit/glok/config"
+	"github.com/ondrejit/glok/geoip"
+	"github.com/ondrejit/glok/handler"
 )
 
 func init() {

@@ -5,6 +5,7 @@ import (
 	conf "github.com/spf13/viper"
 	"net"
 	"testing"
+	"net/http"
 )
 
 var yamlConf = []byte(`
@@ -20,17 +21,20 @@ func init() {
 }
 
 func TestLookup(t *testing.T) {
-	lookup := Lookup(net.ParseIP("81.2.69.160"))
+	lookup, status, _ := Lookup(net.ParseIP("81.2.69.160"))
+	if status != http.StatusOK {
+		t.Errorf("Bad status code: %d", status)
+	}
 	if lookup.Country != "GB" {
-		t.Error("Country")
+		t.Errorf("Bad country: %s", lookup.Country)
 	}
 	if lookup.City != "London" {
-		t.Error("City")
+		t.Errorf("Bad city: %s", lookup.City)
 	}
 	if lookup.Longitude != -0.0931 {
-		t.Error("Longitude")
+		t.Errorf("Bad longitude %f", lookup.Longitude)
 	}
 	if lookup.Latitude != 51.5142 {
-		t.Error("Latitude")
+		t.Errorf("Bad latitude %f", lookup.Latitude)
 	}
 }

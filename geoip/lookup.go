@@ -3,6 +3,9 @@ package geoip
 import (
 	log "github.com/Sirupsen/logrus"
 	"net"
+	"errors"
+	"fmt"
+	"net/http"
 )
 
 type LookupResponse struct {
@@ -12,16 +15,26 @@ type LookupResponse struct {
 	Longitude float64 `json:"longitude"`
 }
 
-func Lookup(ip net.IP) LookupResponse {
+func Lookup(ip net.IP) (LookupResponse, int, error) {
 	record, err := db.City(ip)
 	if err != nil {
-		log.Error(err)
+		log.Errorf("[Lookup] %s", err)
+		return LookupResponse{}, http.StatusBadRequest, err
 	}
-	return LookupResponse{
+
+	lookup := LookupResponse{
 		Country:   record.Country.IsoCode,
 		City:      record.City.Names["en"],
 		Latitude:  record.Location.Latitude,
 		Longitude: record.Location.Longitude,
 	}
+
+	if lookup.Country == "" {
+		err := errors.New(fmt.Sprintf("Lookup for %s not found.", ip))
+		log.Errorf("[Lookup] %s", err)
+		return LookupResponse{}, http.StatusNotFound, err
+	}
+
+	return lookup, http.StatusOK, nil
 
 }

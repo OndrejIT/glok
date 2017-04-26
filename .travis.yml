@@ -1,18 +1,21 @@
 language: go
-sudo: false
-go_import_path: glok
+go_import_path: github.com/ondrejit/glok
 
 go:
-  - 1.6.x
   - 1.7.x
   - master
 
+before_install:
+  - sudo add-apt-repository ppa:masterminds/glide -y
+  - sudo apt-get update -q
+  - sudo apt-get install glide -y
+
 install:
-  - go get ./...
+  - glide install
   - go build
 
 before_script:
-  - go vet ./...
+  - go vet $(glide novendor)
 
 script:
-  - go test ./...
+  - go test $(glide novendor)

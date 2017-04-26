@@ -21,6 +21,11 @@ func Setup() {
 	conf.SetConfigName("glok")
 	conf.AddConfigPath(conf.GetString("config"))
 
-	conf.ReadInConfig()
+	conf.SetEnvPrefix("glok")
+	conf.AutomaticEnv()
+
+	if err := conf.ReadInConfig(); err != nil {
+		log.Fatal("[Config] Fatal error config file: ", err)
+	}
 
 }

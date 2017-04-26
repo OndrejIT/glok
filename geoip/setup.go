@@ -12,6 +12,6 @@ func Setup() {
 	var err error
 	db, err = geoip2.Open(conf.GetString("database"))
 	if err != nil {
-		log.Fatal(err)
+		log.Fatalf("[Geoip] %s", err)
 	}
 }

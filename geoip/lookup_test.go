@@ -9,7 +9,6 @@ import (
 )
 
 var yamlConf = []byte(`
-database: "../GeoIP2-City-Test.mmdb"
 map: "http://maps.google.com?q=%f,%f"
 flag: "http://www.theodora.com/flags/%s-t.gif"
 `)
@@ -17,10 +16,12 @@ flag: "http://www.theodora.com/flags/%s-t.gif"
 func init() {
 	conf.SetConfigType("yaml")
 	conf.ReadConfig(bytes.NewBuffer(yamlConf))
+	conf.Set("database", "../GeoIP2-City-Test.mmdb")
 	Setup()
 }
 
 func TestLookup(t *testing.T) {
+
 	lookup, status, _ := Lookup(net.ParseIP("81.2.69.160"))
 	if status != http.StatusOK {
 		t.Errorf("Bad status code: %d", status)

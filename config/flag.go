@@ -12,6 +12,7 @@ func FlagParser() {
 	flag.StringP("map", "m", "http://maps.google.com?q=%f,%f", "Set map url.")
 	flag.StringP("config", "c", ".", "Set config path.")
 	flag.BoolP("debug", "d", false, "Enable debug mode.")
+	flag.IntP("interval", "i", 24, "DB update interval")
 	flag.Parse()
 	flagToConfig()
 }
@@ -23,4 +24,5 @@ func flagToConfig() {
 	conf.BindPFlag("map", flag.Lookup("map"))
 	conf.BindPFlag("config", flag.Lookup("config"))
 	conf.BindPFlag("debug", flag.Lookup("debug"))
+	conf.BindPFlag("interval", flag.Lookup("interval"))
 }

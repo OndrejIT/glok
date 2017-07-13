@@ -1,6 +1,8 @@
-hash: 3dbbf63030ac209b1418b573831504ea1618f7de4caae84da1697dc67c215f0b
-updated: 2017-04-26T17:08:29.976393187+02:00
+hash: f94654dd47b73db604b21189cfcd94d51ede815560285dd34dea3cd859714ee3
+updated: 2017-07-13T10:46:09.128941424+02:00
 imports:
+- name: github.com/dgrijalva/jwt-go
+  version: d2709f9f1f31ebcda9651b03077758c1f3a0018c
 - name: github.com/fsnotify/fsnotify
   version: 4da3e2cfbabc9f751898f250b49f2439785783a1
 - name: github.com/hashicorp/hcl

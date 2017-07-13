@@ -1,3 +1,7 @@
 database: "GeoIP2-City-Test.mmdb"
 map: "http://maps.google.com?q=%f,%f"
 flag: "http://www.theodora.com/flags/%s-t.gif"
+license: "XXXXXXXXXXXX"
+uid: "XXXXX"
+secret_key: "XXXXXXXXXX"
+allowed_ips: "1.2.3.4/24 4.5.6.7/24"  # bud samotne ip adresy 1.2.3.4 NEBO rozsah 1.2.3.4/24

@@ -8,6 +8,7 @@ import (
 
 func init() {
 	config.Setup()
+	geoip.DBupdate()
 	geoip.Setup()
 }
 

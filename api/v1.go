@@ -4,14 +4,15 @@ import (
 	"encoding/json"
 	"fmt"
 	conf "github.com/spf13/viper"
-	"github.com/ondrejit/glok/geoip"
 	"net"
 	"net/http"
 	"strings"
+	"github.com/ondrejit/glok/geoip"
 )
 
 func V1(w http.ResponseWriter, r *http.Request) {
 	ipString := r.FormValue("ip")
+
 	if ipString == "" {
 		ipString, _, _ = net.SplitHostPort(r.RemoteAddr)
 	}

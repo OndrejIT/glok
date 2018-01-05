@@ -9,7 +9,7 @@ import (
 )
 
 type LookupResponse struct {
-	Country   string  `json:"coutry"`
+	Country   string  `json:"country"`
 	City      string  `json:"city"`
 	Latitude  float64 `json:"latitude"`
 	Longitude float64 `json:"longitude"`

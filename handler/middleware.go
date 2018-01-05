@@ -16,7 +16,7 @@ import (
 
 func Base(w http.ResponseWriter, r *http.Request, next http.HandlerFunc) {
 	ip, _, _ := net.SplitHostPort(r.RemoteAddr)
-	log.Debugf("[Middlware] %s Incoming %s method from: %s ", r.URL, r.Method, ip)
+	log.Debugf("[Middleware] %s Incoming %s method from: %s ", r.URL, r.Method, ip)
 	if err := authCheck(r, w); err == nil {
 		next(w, r)
 	}

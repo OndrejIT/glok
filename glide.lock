@@ -1,8 +1,8 @@
-hash: f94654dd47b73db604b21189cfcd94d51ede815560285dd34dea3cd859714ee3
-updated: 2017-07-13T10:46:09.128941424+02:00
+hash: f56583b78f1d23f1658d0b80dbaecbe64c5a0d1319dfaa9923e426f640fdf678
+updated: 2019-01-04T23:14:38.4388593+01:00
 imports:
 - name: github.com/dgrijalva/jwt-go
-  version: d2709f9f1f31ebcda9651b03077758c1f3a0018c
+  version: 06ea1031745cb8b3dab3f6a236daf2b0aa468b7e
 - name: github.com/fsnotify/fsnotify
   version: 4da3e2cfbabc9f751898f250b49f2439785783a1
 - name: github.com/hashicorp/hcl
@@ -10,26 +10,29 @@ imports:
   subpackages:
   - hcl/ast
   - hcl/parser
+  - hcl/printer
   - hcl/scanner
   - hcl/strconv
   - hcl/token
   - json/parser
   - json/scanner
   - json/token
+- name: github.com/konsorten/go-windows-terminal-sequences
+  version: 5c8c8bd35d3832f5d134ae1e1e375b69a4d25242
 - name: github.com/magiconair/properties
   version: 51463bfca2576e06c62a8504b5c0f06d61312647
 - name: github.com/mitchellh/mapstructure
   version: 53818660ed4955e899c0bcafa97299a388bd7c8e
 - name: github.com/oschwald/geoip2-golang
-  version: 5b1dc16861f81d05d9836bb21c2d0d65282fc0b8
+  version: 7118115686e16b77967cdbf55d1b944fe14ad312
 - name: github.com/oschwald/maxminddb-golang
-  version: 697da8075d2061aa8ed639346443f5d3e8c80b30
+  version: 31672ba7a68affbd201a4c909a72a0484fb1a2f0
 - name: github.com/pelletier/go-buffruneio
   version: c37440a7cf42ac63b919c752ca73a85067e05992
 - name: github.com/pelletier/go-toml
   version: fe206efb84b2bc8e8cfafe6b4c1826622be969e3
 - name: github.com/Sirupsen/logrus
-  version: ba1b36c82c5e05c4f912a88eab0dcd91a171688f
+  version: bcd833dfe83d3cebad139e4a29ed79cb2318bf95
 - name: github.com/spf13/afero
   version: 9be650865eab0c12963d8753212f4f9c66cdcf12
   subpackages:
@@ -39,11 +42,15 @@ imports:
 - name: github.com/spf13/jwalterweatherman
   version: fa7ca7e836cf3a8bb4ebf799f472c12d7e903d66
 - name: github.com/spf13/pflag
-  version: 9a906f17374922ed0f74e1b2f593d3723f2ffb00
+  version: 298182f68c66c05229eb03ac171abe6e309ee79a
 - name: github.com/spf13/viper
-  version: 5d46e70da8c0b6f812e0b170b7a985753b5c63cb
+  version: 6d33b5a963d922d182c91e8a1c88d81fd150cfd4
 - name: github.com/urfave/negroni
-  version: fde5e16d32adc7ad637e9cd9ad21d4ebc6192535
+  version: c6a59be0ce122566695fbd5e48a77f8f10c8a63a
+- name: golang.org/x/crypto
+  version: 459e26527287adbc2adcc5d0d49abff9a5f315a7
+  subpackages:
+  - ssh/terminal
 - name: golang.org/x/sys
   version: afadfcc7779c1f4db0f6f6438afcb108d9c9c7cd
   subpackages:

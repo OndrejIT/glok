@@ -12,10 +12,10 @@ install:
 	go install
 
 build:
-	GOOS=linux GOARCH=amd64 go build -ldflags '-extldflags "-static"'
+	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags '-extldflags "-static"'
 
 docker:
-	docker build --tag=docker.io/glok:latest .
+	docker build --tag=docker.io/ondrejit/glok:latest .
 
 run:
 	go run ./main.go -d

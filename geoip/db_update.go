@@ -6,17 +6,15 @@ import (
 	"encoding/hex"
 	"errors"
 	"fmt"
-	log "github.com/Sirupsen/logrus"
-	conf "github.com/spf13/viper"
 	"io"
 	"io/ioutil"
 	"net/http"
 	"os"
 	"time"
-)
 
-const zero_md5 = "00000000000000000000000000000000"
-const try_to_download = 3
+	log "github.com/sirupsen/logrus"
+	conf "github.com/spf13/viper"
+)
 
 func periodicUpdate(interval time.Duration) {
 	ticker := time.NewTicker(interval)
@@ -33,7 +31,7 @@ func DBupdate() {
 }
 
 func tryGetNewDB() {
-	for i := 1; i <= try_to_download; i++ {
+	for i := 1; i <= 3; i++ {
 		if err := downloadNewDB(); err != nil {
 			log.Errorf("[downloadNewDB] %s", err)
 			time.Sleep(5 * time.Second)
@@ -166,7 +164,7 @@ func getMD5(filePath string) (string, error) {
 
 	if err != nil {
 		log.Debugf("Can't open database: %s", err)
-		return zero_md5, nil
+		return "00000000000000000000000000000000", nil
 	}
 
 	hash := md5.New()

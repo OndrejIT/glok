@@ -1,12 +1,12 @@
 package handler
 
-
 import (
-	conf "github.com/spf13/viper"
 	"bytes"
-	"testing"
 	"net/http/httptest"
+	"testing"
+
 	"github.com/dgrijalva/jwt-go"
+	conf "github.com/spf13/viper"
 )
 
 var testYamlConf = []byte(`
@@ -31,7 +31,7 @@ func TestCheckTokenMissing(t *testing.T) {
 
 	err := check_token(req, w)
 
-	if err == nil  {
+	if err == nil {
 		t.Error("Wrong answer - must be error")
 	}
 
@@ -52,7 +52,7 @@ func TestCheckTokenInvalid(t *testing.T) {
 
 	err := check_token(req, w)
 
-	if err == nil  {
+	if err == nil {
 		t.Error("Wrong answer - must be error")
 	}
 
@@ -69,12 +69,12 @@ func TestCheckTokenInvalid(t *testing.T) {
 
 func TestCheckTokenValid(t *testing.T) {
 	token := getTestToken()
-	req := httptest.NewRequest("GET", "http://127.0.0.1/v1/lookup?token=" + token, nil)
+	req := httptest.NewRequest("GET", "http://127.0.0.1/v1/lookup?token="+token, nil)
 	w := httptest.NewRecorder()
 
 	err := check_token(req, w)
 
-	if err != nil  {
+	if err != nil {
 		t.Errorf("Error with token: %s", err)
 	}
 

@@ -1,14 +1,15 @@
 package api
 
 import (
-	"testing"
-	"net/http/httptest"
-	"net/http"
 	"bytes"
-	"github.com/ondrejit/glok/geoip"
-	conf "github.com/spf13/viper"
 	"encoding/json"
 	"io/ioutil"
+	"net/http"
+	"net/http/httptest"
+	"testing"
+
+	"github.com/ondrejit/glok/geoip"
+	conf "github.com/spf13/viper"
 )
 
 var yamlConf = []byte(`

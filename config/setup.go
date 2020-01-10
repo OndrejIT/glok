@@ -1,7 +1,7 @@
 package config
 
 import (
-	log "github.com/Sirupsen/logrus"
+	log "github.com/sirupsen/logrus"
 	conf "github.com/spf13/viper"
 )
 

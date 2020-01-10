@@ -1,17 +1,18 @@
 package handler
 
 import (
-	"net/http"
-	log "github.com/Sirupsen/logrus"
-	conf "github.com/spf13/viper"
-	"net"
-	"errors"
-	"github.com/dgrijalva/jwt-go"
-	"os"
 	"bytes"
-	"fmt"
-	"strings"
 	"encoding/base64"
+	"errors"
+	"fmt"
+	"net"
+	"net/http"
+	"os"
+	"strings"
+
+	"github.com/dgrijalva/jwt-go"
+	log "github.com/sirupsen/logrus"
+	conf "github.com/spf13/viper"
 )
 
 func Base(w http.ResponseWriter, r *http.Request, next http.HandlerFunc) {
@@ -22,7 +23,7 @@ func Base(w http.ResponseWriter, r *http.Request, next http.HandlerFunc) {
 	}
 }
 
-func authCheck(r *http.Request, w http.ResponseWriter) error{
+func authCheck(r *http.Request, w http.ResponseWriter) error {
 	allowed_ips := conf.GetStringSlice("allowed_ips")
 	host, _, _ := net.SplitHostPort(r.RemoteAddr)
 	remote_ip := net.ParseIP(host)
@@ -47,7 +48,7 @@ func authCheck(r *http.Request, w http.ResponseWriter) error{
 func getBasicAuth(r *http.Request) (string, string) {
 	auth := strings.SplitN(r.Header.Get("Authorization"), " ", 2)
 	if len(auth) != 2 || auth[0] != "Basic" {
-            return "", ""
+		return "", ""
 	}
 	payload, _ := base64.StdEncoding.DecodeString(auth[1])
 	pair := strings.SplitN(string(payload), ":", 2)

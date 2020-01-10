@@ -3,11 +3,12 @@ package api
 import (
 	"encoding/json"
 	"fmt"
-	conf "github.com/spf13/viper"
 	"net"
 	"net/http"
 	"strings"
+
 	"github.com/ondrejit/glok/geoip"
+	conf "github.com/spf13/viper"
 )
 
 func V1(w http.ResponseWriter, r *http.Request) {

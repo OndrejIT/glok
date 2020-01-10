@@ -1,9 +1,10 @@
 package geoip
 
 import (
-	conf "github.com/spf13/viper"
 	"os"
 	"testing"
+
+	conf "github.com/spf13/viper"
 )
 
 func TestUpdateMissingDb(t *testing.T) {

@@ -1,11 +1,6 @@
-.PHONY: update install build run test docker
+.PHONY: build run test docker
 .DEFAULT_GOAL := deploy
 
-novendor = glide novendor | xargs -n 1 go $(1)
-
-update:
-	glide update
-	go install
 
 install:
 	glide install
@@ -21,7 +16,7 @@ run:
 	go run ./main.go -d
 
 test:
-	$(call novendor,vet)
-	$(call novendor,test)
+	go mod verify
+	go test ./...
 
-deploy: install test build docker
+deploy: test build docker

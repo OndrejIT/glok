@@ -2,10 +2,11 @@ package geoip
 
 import (
 	"bytes"
-	conf "github.com/spf13/viper"
 	"net"
-	"testing"
 	"net/http"
+	"testing"
+
+	conf "github.com/spf13/viper"
 )
 
 var yamlConf = []byte(`

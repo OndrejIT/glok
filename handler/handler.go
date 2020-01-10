@@ -2,11 +2,12 @@ package handler
 
 import (
 	"fmt"
-	log "github.com/Sirupsen/logrus"
-	conf "github.com/spf13/viper"
 	"net/http"
-	"github.com/urfave/negroni"
+
 	"github.com/ondrejit/glok/api"
+	log "github.com/sirupsen/logrus"
+	conf "github.com/spf13/viper"
+	"github.com/urfave/negroni"
 )
 
 func Start() {

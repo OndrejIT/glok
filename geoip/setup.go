@@ -1,8 +1,8 @@
 package geoip
 
 import (
-	log "github.com/Sirupsen/logrus"
 	"github.com/oschwald/geoip2-golang"
+	log "github.com/sirupsen/logrus"
 	conf "github.com/spf13/viper"
 )
 

@@ -1,11 +1,12 @@
 package geoip
 
 import (
-	log "github.com/Sirupsen/logrus"
-	"net"
 	"errors"
 	"fmt"
+	"net"
 	"net/http"
+
+	log "github.com/sirupsen/logrus"
 )
 
 type LookupResponse struct {

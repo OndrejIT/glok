@@ -8,7 +8,7 @@ import (
 
 var db *geoip2.Reader
 
-func Setup() {
+func OpenDatabase() {
 	var err error
 	db, err = geoip2.Open(conf.GetString("database"))
 	if err != nil {

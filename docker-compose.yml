@@ -1,0 +1,11 @@
+version: "2"
+
+services:
+  glok:
+    image: docker.io/ondrejit/glok:latest
+    build: .
+    command: --debug
+    volumes:
+      - ./glok.yml:/glok.yml
+    ports:
+      - 8888:8888

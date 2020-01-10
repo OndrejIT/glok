@@ -7,6 +7,7 @@ import (
 
 func FlagParser() {
 	flag.IntP("port", "p", 8888, "Set server port.")
+	flag.String("ip", "0.0.0.0", "Set server ip.")
 	flag.String("db", "GeoIP2-City.mmdb", "Set database path.")
 	flag.StringP("flag", "f", "http://www.theodora.com/flags/%s-t.gif", "Set flag url.")
 	flag.StringP("map", "m", "http://maps.google.com?q=%f,%f", "Set map url.")
@@ -18,6 +19,7 @@ func FlagParser() {
 }
 
 func flagToConfig() {
+	conf.BindPFlag("ip", flag.Lookup("ip"))
 	conf.BindPFlag("port", flag.Lookup("port"))
 	conf.BindPFlag("database", flag.Lookup("db"))
 	conf.BindPFlag("flag", flag.Lookup("flag"))

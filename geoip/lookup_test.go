@@ -18,7 +18,7 @@ func init() {
 	conf.SetConfigType("yaml")
 	conf.ReadConfig(bytes.NewBuffer(yamlConf))
 	conf.Set("database", "../GeoIP2-City-Test.mmdb")
-	Setup()
+	OpenDatabase()
 }
 
 func TestLookup(t *testing.T) {

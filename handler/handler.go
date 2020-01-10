@@ -11,8 +11,8 @@ import (
 )
 
 func Start() {
-	hostPort := fmt.Sprintf("0.0.0.0:%d", conf.GetInt("port"))
-	log.Info("[Main] Initiating server listening at ", hostPort)
+	adress := fmt.Sprintf("%s:%d", conf.GetString("ip"), conf.GetInt("port"))
+	log.Info("[Main] Initiating server listening at ", adress)
 
 	mux := http.NewServeMux()
 	mux.HandleFunc("/v1/", api.V1)
@@ -20,5 +20,5 @@ func Start() {
 	n := negroni.New(negroni.HandlerFunc(Base))
 	n.UseHandler(mux)
 
-	log.Fatal(http.ListenAndServe(hostPort, n))
+	log.Fatal(http.ListenAndServe(adress, n))
 }

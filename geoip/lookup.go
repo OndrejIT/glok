@@ -1,7 +1,6 @@
 package geoip
 
 import (
-	"errors"
 	"fmt"
 	"net"
 	"net/http"
@@ -31,7 +30,7 @@ func Lookup(ip net.IP) (LookupResponse, int, error) {
 	}
 
 	if lookup.Country == "" {
-		err := errors.New(fmt.Sprintf("Lookup for %s not found.", ip))
+		err := fmt.Errorf("Lookup for %s not found", ip)
 		log.Errorf("[Lookup] %s", err)
 		return LookupResponse{}, http.StatusNotFound, err
 	}

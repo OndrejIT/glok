@@ -7,14 +7,16 @@ import (
 	"errors"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"net/http"
+	"net/url"
 	"os"
 	"time"
 
 	log "github.com/sirupsen/logrus"
 	conf "github.com/spf13/viper"
 )
+
+const zeroMd5 = "00000000000000000000000000000000"
 
 func periodicUpdate(interval time.Duration) {
 	ticker := time.NewTicker(interval)
@@ -25,23 +27,34 @@ func periodicUpdate(interval time.Duration) {
 }
 
 func DBupdate() {
-	update_interval := conf.GetInt("interval")
-	go periodicUpdate(time.Duration(update_interval) * time.Hour)
-	tryGetNewDB()
-}
+	updateInterval := conf.GetInt("interval")
+	go periodicUpdate(time.Duration(updateInterval) * time.Hour)
 
-func tryGetNewDB() {
-	for i := 1; i <= 3; i++ {
-		if err := downloadNewDB(); err != nil {
-			log.Errorf("[downloadNewDB] %s", err)
-			time.Sleep(5 * time.Second)
+	if stats := tryGetNewDB(); stats == false {
+		md5Old, _ := getMD5(conf.GetString("database"))
+		if md5Old != zeroMd5 {
+			OpenDatabase()
 		} else {
-			break
+			log.Fatalf("[DBupdate] Can't read database file")
 		}
 	}
 }
 
-func downloadNewDB() error {
+func tryGetNewDB() bool {
+	for i := 1; i <= 3; i++ {
+		if stats, err := downloadNewDB(); err != nil {
+			log.Errorf("[downloadNewDB] %s", err)
+			time.Sleep(5 * time.Second)
+		} else {
+			return stats
+		}
+	}
+
+	return false
+}
+
+// https://github.com/maxmind/geoipupdate/blob/4f30969a125b55f986382d1d3b4f9534929fd5b5/pkg/geoipupdate/database/http_reader.go#L43
+func downloadNewDB() (bool, error) {
 	log.Debug("Trying update database.")
 
 	md5Old, err := getMD5(conf.GetString("database"))
@@ -49,25 +62,32 @@ func downloadNewDB() error {
 		log.Errorf("[getMD5] %s", err)
 	}
 
-	ipAddr, err := getClientIp()
+	file_name := conf.GetString("database") + ".gz"
+
+	maxMindURL := fmt.Sprintf(
+		"https://updates.maxmind.com/geoip/databases/%s/update?db_md5=%s",
+		conf.GetString("product_id"),
+		url.QueryEscape(md5Old),
+	)
+
+	req, err := http.NewRequest(http.MethodGet, maxMindURL, nil)
 	if err != nil {
-		return err
+		return false, err
 	}
 
-	challengeMD5 := getChallengeMD5(conf.GetString("license"), ipAddr) // challengemd5 == md5sum(license+clientipaddr)
-	file_name := conf.GetString("database") + ".gz"
-	dl_url := fmt.Sprintf("https://updates.maxmind.com/app/update_secure?db_md5=%s&challenge_md5=%s&user_id=%s&edition_id=%s",
-		md5Old, challengeMD5, conf.GetString("uid"), conf.GetString("product_id"))
+	req.SetBasicAuth(conf.GetString("uid"), conf.GetString("license"))
 
-	log.Debug("[downloadNewDB] Calling get request to ", dl_url)
-	resp, err := http.Get(dl_url)
+	log.Debug("[downloadNewDB] Calling get request to ", maxMindURL)
 
+	client := &http.Client{}
+
+	resp, err := client.Do(req)
 	if err != nil {
-		return err
+		return false, err
 	}
 
 	if header := resp.Header.Get("X-Database-Md5"); header == "" {
-		return errors.New("Don't have X-Database-Md5 header.")
+		return false, errors.New("Don't have X-Database-Md5 header")
 	}
 
 	md5Response := resp.Header.Get("X-Database-Md5")
@@ -75,16 +95,17 @@ func downloadNewDB() error {
 
 	if md5Response != md5Old {
 		if err = downloadToFile(resp, file_name); err != nil {
-			return err
+			return false, err
 		}
 		if err = gunzipAndReplace(file_name, md5Response); err != nil {
-			return err
+			return false, err
 		}
-	} else {
-		log.Debug("No file to download")
+		OpenDatabase()
+		return true, nil
 	}
 
-	return nil
+	log.Debug("No file to download")
+	return false, nil
 }
 
 func gunzipAndReplace(file_name string, md5Response string) error {
@@ -124,7 +145,7 @@ func gunzipAndReplace(file_name string, md5Response string) error {
 	}
 
 	if md5New != md5Response {
-		err := errors.New(fmt.Sprintf("bad md5 from file %s != %s", md5New, md5Response))
+		err := fmt.Errorf("bad md5 from file %s != %s", md5New, md5Response)
 		return err
 	}
 
@@ -148,14 +169,6 @@ func downloadToFile(resp *http.Response, file_name string) error {
 	return nil
 }
 
-func getChallengeMD5(license string, ipAddr string) string {
-	Hash := md5.Sum([]byte(license + ipAddr))
-	encodedHash := hex.EncodeToString(Hash[:16])
-	log.Debug("[getChallengeMD5] License is ", license)
-	log.Debug("[getChallengeMD5] Challenge md5 is ", encodedHash)
-	return encodedHash
-}
-
 func getMD5(filePath string) (string, error) {
 	var returnMD5 string
 
@@ -164,14 +177,14 @@ func getMD5(filePath string) (string, error) {
 
 	if err != nil {
 		log.Debugf("Can't open database: %s", err)
-		return "00000000000000000000000000000000", nil
+		return zeroMd5, nil
 	}
 
 	hash := md5.New()
 
 	_, err = io.Copy(hash, file)
 	if err != nil {
-		return returnMD5, err
+		return zeroMd5, err
 	}
 
 	hashInBytes := hash.Sum(nil)
@@ -180,30 +193,4 @@ func getMD5(filePath string) (string, error) {
 	log.Debugf("[getMD5] MD5 of %s is %s", filePath, returnMD5)
 
 	return returnMD5, nil
-}
-
-func getClientIp() (string, error) {
-	url := "https://updates.maxmind.com/app/update_getipaddr"
-
-	log.Debug("[getClientIp] get request to ", url)
-	resp, err := http.Get(url)
-	if err != nil || resp.StatusCode != 200 {
-		log.Error("[getClientIp] Can't get client IP")
-		return "", err
-	}
-
-	defer resp.Body.Close()
-	log.Debug("[getClientIp] http status ", resp.Status)
-
-	bodyBytes, err := ioutil.ReadAll(resp.Body)
-
-	if err != nil {
-		log.Errorf("[getClientIp] Can't get client IP")
-		return "", err
-	}
-
-	bodyString := string(bodyBytes)
-	log.Debug("[getClientIp] client IP is ", bodyString)
-
-	return bodyString, nil
 }

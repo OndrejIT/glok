@@ -13,10 +13,11 @@ docker:
 	docker build --tag=docker.io/ondrejit/glok:latest .
 
 run:
-	go run ./main.go --debug
+	go run ./main.go -d
 
 test:
 	go mod verify
+	go vet ./...
 	go test ./...
 
 deploy: test build docker
